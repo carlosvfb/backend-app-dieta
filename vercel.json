@@ -1,0 +1,7 @@
+{
+    "functions": {
+      "api/fastify.js": {
+        "runtime": "nodejs18.x"
+      }
+    }
+  }

@@ -29,5 +29,9 @@ import {
         return new CreateNutritionController().handle(request, reply)
     })
 
+    module.exports = async (req, res) => {
+        await fastify.ready(); // Certifica que o Fastify está pronto para atender
+        fastify.server.emit('request', req, res); // Encaminha a requisição para o Fastify
+      };
 
  }
