@@ -4,7 +4,7 @@ import {
     FastifyRequest,
     FastifyReply
  } from "fastify";
- import { CreateNutritionController } from "./controllers/CreateNutritionControler";
+ import { CreateNutritionController } from "../controllers/CreateNutritionControler";
 
  export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
     fastify.get("/teste", (request: FastifyRequest, reply: FastifyReply) => {
@@ -28,10 +28,5 @@ import {
     fastify.post("/create", async (request: FastifyRequest, reply: FastifyReply) => {
         return new CreateNutritionController().handle(request, reply)
     })
-
-    module.exports = async (req, res) => {
-        await fastify.ready(); // Certifica que o Fastify está pronto para atender
-        fastify.server.emit('request', req, res); // Encaminha a requisição para o Fastify
-      };
 
  }
