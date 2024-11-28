@@ -1,24 +1,34 @@
-import fastify from "fastify";
-import cors from "@fastify/cors";
-import dotenv from 'dotenv'
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 import { routes } from "./services/routes";
 
-const app = fastify({ logger: true });
 dotenv.config();
 
-app.setErrorHandler((error, request, reply) => {
-    reply.code(400).send({ error: error.message });
+const app = express();
+
+// Middleware para lidar com CORS
+app.use(cors());
+
+// Middleware para JSON
+app.use(express.json());
+
+// Registrar as rotas
+routes(app);
+
+// Middleware para tratamento de erros
+app.use((err, req, res, next) => {
+    res.status(400).send({ error: err.message });
 });
 
+// Inicializar o servidor
 const start = async () => {
-    app.register(cors);
-    app.register(routes);
-
     try {
-        await app.listen({port: 3333, host: "0.0.0.0"});
-        console.log(`Servidor rodando no http://localhost:3333`);
+        app.listen(3333, "0.0.0.0", () => {
+            console.log(`Servidor rodando no http://localhost:3333`);
+        });
     } catch (err) {
-        app.log.error(err);
+        console.error("Erro ao iniciar o servidor:", err);
         process.exit(1);
     }
 };

@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from "fastify";
+import { Request, Response } from "express";
 import { CreateNutritionService } from "../services/CreateNutritionService";
 
 export interface DataProps {
@@ -12,15 +12,19 @@ export interface DataProps {
 }
 
 class CreateNutritionController {
-    async handle(request: FastifyRequest, reply: FastifyReply) {
+    async handle(request: Request, response: Response) {
         const { name, weight, height, age, gender, objective, level } = request.body as DataProps;
 
         const createNutrition = new CreateNutritionService();
 
-        const nutrition = await createNutrition.execute({ name, weight, height, age, gender, objective, level });
-
-        reply.status(201).send(nutrition);
+        try {
+            const nutrition = await createNutrition.execute({ name, weight, height, age, gender, objective, level });
+            return response.status(201).json(nutrition);
+        } catch (err) {
+            console.error(err);
+            return response.status(500).json({ error: "Erro ao criar nutrição" });
+        }
     }
 }
 
-export { CreateNutritionController }
+export { CreateNutritionController };
